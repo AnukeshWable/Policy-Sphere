@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # lb:// = look the service up in Eureka by name and load-balance across its instances
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/v1/customers/**
+
+        - id: policy-service
+          uri: lb://policy-service
+          predicates:
+            - Path=/api/v1/policies/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    registry-fetch-interval-seconds: 5      # DEV: see registry changes quickly
+  instance:
+    lease-renewal-interval-in-seconds: 5    # DEV
+    lease-expiration-duration-in-seconds: 15 # DEV
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    gateway:
+      access: read-only
