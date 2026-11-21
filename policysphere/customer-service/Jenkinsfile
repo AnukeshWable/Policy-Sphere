@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Checkout') { steps { checkout scm } }
     stage('Build & Test') {
-      steps { dir('customer-service') { sh 'mvn clean verify' } }
+      steps { dir('policysphere/customer-service') { sh 'mvn clean verify' } }
     }
   }
 }
