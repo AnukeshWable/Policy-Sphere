@@ -6,5 +6,12 @@ pipeline {
     stage('Build & Test') {
       steps { dir('policysphere/customer-service') { sh 'mvn clean verify' } }
     }
+    stage('Docker Build') {
+      steps {
+        dir('policysphere/customer-service') {
+          sh 'docker build -t policysphere/customer-service:${BUILD_NUMBER} -t policysphere/customer-service:latest .'
+        }
+      }
+    }
   }
 }
